@@ -42,7 +42,7 @@ console or the `gcloud`/`bq` CLI. **Nothing here has been executed against a liv
 project** — `bq` was not installed on the machine the corpus was built on — so do
 the load once beforehand and check the row counts are 6 / 42 / 16 / 25 / 30.
 
-In the console: create a dataset (region EU), paste `schema.sql` into the query
+In the console: create a dataset (region `europe-north1`), paste `schema.sql` into the query
 editor and run it, then for each file use **Create table → Upload**. Set the
 format to *Newline-delimited JSON* for `documents`; for the CSVs, set *Schema* to
 edit-as-text if autodetect guesses wrong (it tends to make `sla_breached` a
