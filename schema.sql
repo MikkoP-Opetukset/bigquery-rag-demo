@@ -10,7 +10,7 @@
 
 CREATE SCHEMA IF NOT EXISTS `norvane_demo`
 OPTIONS (
-  location = 'EU',
+  location = 'europe-north1',
   description = 'Fictional managed-IT-services corpus for BigQuery and RAG demos'
 );
 
