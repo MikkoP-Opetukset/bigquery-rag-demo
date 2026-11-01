@@ -11,8 +11,8 @@
 -- ------------------------------------------------------------
 -- 00. What is in the dataset?
 -- ------------------------------------------------------------
-SELECT table_name, row_count
-FROM `norvane_demo.INFORMATION_SCHEMA.TABLES`
+SELECT table_id AS table_name, row_count
+FROM `norvane_demo.__TABLES__`
 ORDER BY table_name;
 
 
