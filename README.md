@@ -24,7 +24,6 @@ BigQuery**, built so the *same* corpus can be reused as the document store for a
 | `data/incidents.csv` | 16 incidents |
 | `data/assets.csv` | 25 managed devices with firmware, EOL dates and patch groups |
 | `schema.sql` | BigQuery DDL for 5 tables |
-| `load.sh` | creates the dataset and loads all five tables |
 | `queries.sql` | 16 numbered query blocks, simplest first |
 | `scripts/build_ndjson.py` | rebuilds `documents.ndjson` from `docs_md/` (no dependencies) |
 | `scripts/verify_preserve.py` | re-checks that the trimmed documents kept their required facts and the deliberate defects |
@@ -38,14 +37,27 @@ Classification: 21 internal, 8 confidential, 1 restricted.
 
 ## Week 1 — the BigQuery demo
 
-Prerequisites: `gcloud` CLI, authenticated, project selected. **`bq` is not
-installed on the machine this corpus was built on, so `load.sh` has not been
-executed** — run it once beforehand and confirm the row counts.
+Prerequisites: a Google Cloud project with BigQuery enabled, and either the
+console or the `gcloud`/`bq` CLI. **Nothing here has been executed against a live
+project** — `bq` was not installed on the machine the corpus was built on — so do
+the load once beforehand and check the row counts are 6 / 42 / 16 / 25 / 30.
+
+In the console: create a dataset (region EU), paste `schema.sql` into the query
+editor and run it, then for each file use **Create table → Upload**. Set the
+format to *Newline-delimited JSON* for `documents`; for the CSVs, set *Schema* to
+edit-as-text if autodetect guesses wrong (it tends to make `sla_breached` a
+STRING rather than a BOOLEAN).
+
+From the CLI, one command per table — note `bq load` **appends**, so truncate the
+tables first if you run it twice:
 
 ```bash
-gcloud auth login
-gcloud config set project YOUR_PROJECT_ID
-./load.sh
+DATASET=norvane_demo
+bq query --use_legacy_sql=false < schema.sql
+for t in customers sla_targets incidents assets; do
+  bq load --source_format=CSV --skip_leading_rows=1 "$DATASET.$t" "data/$t.csv"
+done
+bq load --source_format=NEWLINE_DELIMITED_JSON "$DATASET.documents" data/documents.ndjson
 ```
 
 Then walk through `queries.sql`. The intended arc:
@@ -112,9 +124,8 @@ if you want to keep both weeks on one platform.
 
 ## Known limitations
 
-- `load.sh` and `queries.sql` were written against the documented `bq` interface
-  but **never executed** — no `bq`/`gcloud` on the build machine. Verify before
-  presenting.
+- `queries.sql` was written against the documented `bq` interface but **never
+  executed** — no `bq`/`gcloud` on the build machine. Verify before presenting.
 - `incidents.opened_at` / `resolved_at` are naive timestamp strings. BigQuery
   will read them as UTC, while the source documents express times in EET/EEST
   (UTC+2/+3). Harmless for the demo; mention it if anyone joins text to timestamps.
