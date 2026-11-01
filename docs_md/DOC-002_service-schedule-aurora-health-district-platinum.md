@@ -12,6 +12,7 @@ review_due: 2026-11-20
 source_location: SharePoint /Contracts/Customers/Aurora/Service Schedule - Aurora - v2.1.docx
 related: [DOC-001, DOC-005, DOC-006, DOC-019, DOC-032]
 supersedes: [Service Schedule v1.4 (2021)]
+synthetic: true
 ---
 
 # Service Schedule — Aurora Health District

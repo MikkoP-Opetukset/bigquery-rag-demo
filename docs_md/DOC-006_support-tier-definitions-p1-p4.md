@@ -12,6 +12,7 @@ review_due: 2026-09-15
 source_location: Confluence / Service Desk / Severity Matrix
 related: [DOC-001, DOC-020, DOC-023]
 supersedes: [v4.0]
+synthetic: true
 ---
 
 # Support Tier Definitions (P1–P4)
