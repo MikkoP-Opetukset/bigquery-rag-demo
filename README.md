@@ -27,9 +27,11 @@ BigQuery**, built so the *same* corpus can be reused as the document store for a
 | `load.sh` | creates the dataset and loads all five tables |
 | `queries.sql` | 16 numbered query blocks, simplest first |
 | `scripts/build_ndjson.py` | rebuilds `documents.ndjson` from `docs_md/` (no dependencies) |
+| `scripts/verify_preserve.py` | re-checks that the trimmed documents kept their required facts and the deliberate defects |
 | `CANON.md` | the shared fact sheet the corpus was written against |
 
-**Corpus shape:** 30 documents, ~21,500 words, mean 715 words each.
+**Corpus shape:** 30 documents, ~19,500 words, mean 651 words each
+(shortest 398, longest 944).
 Types: 9 policy, 4 contract, 4 reference, 4 postmortem, 3 standard, 1 each of
 guide, runbook, plan, process, checklist, vendor contract.
 Classification: 21 internal, 8 confidential, 1 restricted.
@@ -120,8 +122,9 @@ if you want to keep both weeks on one platform.
   single availability figure. Real contracts are monthly, and Cobalt's target is
   measured over trading hours only. It is an illustration, not a compliance
   calculation.
-- Four documents run long: DOC-015 (1,246 words), DOC-016 (1,016), DOC-032
-  (1,356) and DOC-033 (1,269). Fine for chunking, but they will dominate a naive
-  word-count sort.
+- Document lengths are now uniform enough that no document dominates a word-count
+  sort. Before they were trimmed, DOC-015, 016, 032 and 033 ran 1,000–1,350 words;
+  `scripts/verify_preserve.py` exists because that trim had to keep a specific set
+  of facts intact, and it re-checks them on demand.
 - The corpus has 30 documents, not 20–30 in the sense of "at most 30 with room to
   spare" — it is exactly 30, so adding more means re-running the canon check.

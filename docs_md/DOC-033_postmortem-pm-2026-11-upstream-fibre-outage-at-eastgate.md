@@ -21,70 +21,56 @@ synthetic: true
 
 ## Summary
 
-On 2026-06-29 the upstream connectivity for Eastgate Housing Association (CUST-06, Bronze tier) was disrupted when a third-party contractor cutting a duct during street works damaged the Vantage Fibre primary circuit VF-HEL-4471. The backup circuit VF-HEL-4472 did not fail over because both circuits share the last 400 metres of duct into the building, and the same duct was cut. Eastgate's two sites (eastgate-offices and eastgate-sheltered-housing) were offline for 6 hours 40 minutes (05:05 → 11:45 EEST). No telecare calls were lost; the sheltered-housing telecare system runs on a separate GSM path that was unaffected by the street works.
-
-The incident was classified as P1. The Bronze availability target of 99.00% was missed. A service credit of EUR 3,100 was issued to the customer, capped at the 5% Bronze limit per DOC-002. A vendor credit of EUR 1,850 was claimed from Vantage Fibre within the 30-day contractual window.
+On 2026-06-29, a third-party contractor during street works cut the duct carrying the Vantage Fibre primary circuit VF-HEL-4471 for Eastgate Housing Association (CUST-06, Bronze tier). The backup circuit VF-HEL-4472 did not fail over because both circuits share the last 400 metres of duct into the building — the duct that was cut. Eastgate's two sites (eastgate-offices, eastgate-sheltered-housing) were offline for 6 hours 40 minutes (400 minutes), 05:05 → 11:45 EEST.
 
 ## Timeline
 
 | Time (EEST) | Event |
 |---|---|
-| 05:05 | Zabbix monitoring detects upstream circuit down; alert fired |
-| 05:12 | On-call engineer acknowledges the alert |
+| 05:05 | Zabbix detects circuit down; alert fired |
+| 05:12 | On-call engineer acknowledges alert |
 | 05:30 | Ticket raised with Vantage Fibre NOC as Critical |
-| 06:10 | Vantage Fibre confirms street-works cable strike as the cause |
-| 07:00 | Norvane establishes that the backup circuit VF-HEL-4472 is also down; shared-duct issue raised internally |
-| 09:20 | Vantage Fibre splice team arrives on site |
-| 11:20 | Primary circuit restored by Vantage Fibre |
-| 11:45 | Eastgate services verified as operational; incident resolved |
+| 06:10 | Vendor confirms street-works cable strike |
+| 07:00 | Backup VF-HEL-4472 also down; shared duct raised internally |
+| 09:20 | Splice team arrives on site |
+| 11:20 | Primary circuit restored |
+| 11:45 | Services verified; incident closed |
 
 ## Impact
 
-- Both Eastgate sites (eastgate-offices and eastgate-sheltered-housing) offline for 6 hours 40 minutes.
-- Bronze availability target of 99.00% breached.
-- Service credit of EUR 3,100 issued to the customer (capped at 5% of monthly fee, the Bronze limit per DOC-002).
-- No sheltered-housing telecare calls lost (telecare runs on a separate GSM path).
-- Vendor credit of EUR 1,850 claimed from Vantage Fib Oy within the 30-day window.
+- Both sites offline for 6 hours 40 minutes.
+- No sheltered-housing telecare calls lost: telecare runs on a separate GSM path.
+- Bronze availability target of 99.00% breached; service credit EUR 3,100, capped at the 5% Bronze limit per the credit schedule in DOC-005, applied under DOC-002.
+- Vendor credit of EUR 1,850 claimed from Vantage Fibre within the 30-day contractual window.
 
 ## Root cause
 
-The root cause category is upstream_provider. A third-party contractor, executing approved street works, cut through a fibre duct containing the Vantage Fibre primary circuit VF-HEL-4471. The circuit went down immediately.
+The root cause category is upstream_provider. A third-party contractor executing approved street works cut the duct containing primary circuit VF-HEL-4471, which went down immediately. The upstream architecture comprises VF-HEL-4471 (1 Gbit/s symmetric primary) and VF-HEL-4472 (300/100 Mbit/s backup), with failover controlled by the edge firewalls; both circuits ride the same last 400 metres of duct into the DC1 building, so the cut took both down and the backup could not take over.
 
-Norvane's upstream architecture provides two circuits: VF-HEL-4471 (1 Gbit/s symmetric primary) and VF-HEL-4472 (300/100 Mbit/s backup). The edge firewalls control failover between them. The backup circuit VF-HEL-4472 did not take over because both circuits share the last 400 metres of duct into the building. The street works cut through that shared duct section, taking both circuits down simultaneously.
-
-The procurement record for the backup circuit, held in DOC-007, notes the shared duct in 2023. This note was never acted upon. Norvane's network architecture documentation (DOC-010) describes the two paths as "geographically diverse fibre paths with no shared physical infrastructure" (DOC-010 section 5). This description does not match the actual physical reality.
+The discrepancy between documents is material: the network architecture documentation (DOC-010, section 5) describes the two paths as "geographically diverse fibre paths with no shared physical infrastructure", while the 2023 procurement record for the backup circuit (DOC-007) noted the shared duct — a note that was never acted on.
 
 ## Detection
 
-Zabbix detected the circuit failure at 05:05 via its 60-second polling and BGP-peer-down alert rule, which fires immediately (DOC-021 section 3, "BGP or upstream peer down — P1 — Immediate"). The alert was acknowledged within 7 minutes. The detection of the primary circuit failure was timely; the detection that the backup circuit was also down took longer because the initial assumption was that the backup path would have already taken over.
+Zabbix detected the failure at 05:05 via 60-second polling and immediate BGP-peer-down rule (DOC-021 section 3); the alert was acknowledged within 7 minutes. Confirming the backup was also down took longer, because failover was assumed to have occurred.
 
 ## Response
 
-1. The on-call engineer acknowledged the alert at 05:12 and opened the incident ticket.
-2. At 05:30, the Vantage Fibre NOC was contacted and the issue was raised as Critical.
-3. At 06:10, the vendor confirmed the cause as a street-works cable strike.
-4. At 07:00, the engineer verified that the backup circuit VF-HEL-4472 was also down and raised the shared-duct issue internally with the Head of Infrastructure.
-5. The Service Delivery Manager notified the customer of the outage and the upstream nature of the cause.
-6. The vendor splice team was on site at 09:20 and restored the circuit at 11:20.
-7. Services were verified at 11:45 and the incident was closed.
+1. Alert acknowledged; incident ticket opened.
+2. Vantage Fibre NOC engaged as Critical.
+3. Backup confirmed down; shared duct raised with the Head of Infrastructure.
+4. Customer notified by Service Delivery Manager.
+5. Splice team restored the circuit; services verified and incident closed.
 
 ## Contributing factors
 
-1. **Shared duct between primary and backup circuits.** VF-HEL-4471 and VF-HEL-4472 share the last 400 metres of duct into the DC1 building. A cut in that duct takes both circuits down, eliminating the diversity that the backup circuit is intended to provide. This was recorded in the procurement documentation for the backup circuit in 2023 (DOC-007) but was never remediated.
-
-2. **Architecture documentation does not match physical reality.** DOC-010 section 5 states that "DC1 and DC2 sit on geographically diverse fibre paths with no shared physical infrastructure" and that the two sites are connected "over separate right-of-way routes, eliminating any single-point-of-failure risk in the transport layer between them." For the upstream circuits at DC1, the two paths are not independent in the final segment. The procurement record in DOC-007 captures the shared-duct detail that the architecture document omits.
-
-3. **Procurement note not acted upon.** The procurement record for VF-HEL-4472 noted the shared duct in 2023. No action was taken to remedy the issue, commission a separate path, or at minimum flag the risk in the customer's site plan. This is a process gap: identified risk was recorded but never escalated to resolution.
-
-4. **No pre-armed failover test.** The backup circuit failover was not tested prior to the outage. A quarterly failover test would have revealed the shared-duct dependency before a real incident exposed it. The quarterly service review for Eastgate does not include a failover test.
+1. **Shared duct.** The last 400 metres of duct carries both circuits, eliminating the diversity the backup is meant to provide.
+2. **Documentation vs physical reality.** DOC-010 claims no shared physical infrastructure; the 2023 procurement note (DOC-007) recorded the shared duct, but the risk was recorded and never escalated to resolution.
+3. **No pre-armed failover test.** A quarterly failover test would have exposed the dependency before a real incident; Eastgate's quarterly service review includes none.
 
 ## What went well
 
-- Zabbix detected the outage within seconds; the alert fired immediately per the monitoring thresholds in DOC-021.
-- The on-call engineer acknowledged the alert within 7 minutes and raised the vendor NOC ticket promptly.
-- The vendor met its 30-minute response SLA; the splice team was dispatched and arrived on site within 4 hours 15 minutes of the initial report.
-- The vendor credit of EUR 1,850 was claimed within the 30-day contractual window.
-- Telecare services were unaffected; the GSM path for sheltered-housing telecare is independent of the fibre circuits and functioned throughout the incident.
+- Zabbix detected the outage within seconds.
+- The vendor met its 30-minute response commitment but missed its 4-hour target repair: 6 hours 15 minutes to restoration.
 
 ## Action items
 
@@ -97,8 +83,6 @@ Zabbix detected the circuit failure at 05:05 via its 60-second polling and BGP-p
 
 ## Lessons learned
 
-1. **Documented diversity is not the same as physical diversity.** Architecture diagrams and descriptive documents can present a view of the network that does not match the ground reality. Procurement records that capture operational constraints must be reconciled with architecture documentation, and the higher-fidelity record (procurement) should take precedence when they disagree.
-
-2. **Failover testing validates design assumptions.** A pre-armed test of the upstream circuit failover would have identified the shared-duct dependency before a contractor's digger exposed it. Failover tests should be a standard part of the quarterly service review for all customers with redundant circuits.
-
-3. **Procurement notes must be acted on.** Identifying a risk and recording it in a procurement file is not sufficient. Identified risks must be escalated to a remediation owner with a due date and tracked to closure.
+1. **Documented diversity is not physical diversity.** When architecture documents (DOC-010) and procurement records (DOC-007) disagree, the higher-fidelity operational record prevails.
+2. **Failover testing validates design assumptions.** Pre-armed tests should be standard in quarterly service reviews for all customers with redundant circuits.
+3. **Procurement notes must be acted on.** An identified risk must be escalated to a remediation owner with a due date and tracked to closure.
