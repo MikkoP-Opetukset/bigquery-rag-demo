@@ -12,6 +12,7 @@ review_due: 2026-06-30
 source_location: //fs01.norvane.internal/policies/legal/customers/cobalt/cobalt-service-schedule-v3.0.pdf
 related: [DOC-001, DOC-005, DOC-006, DOC-012, DOC-030]
 supersedes: [v2.2 (2023)]
+synthetic: true
 ---
 
 # Service Schedule — Cobalt Retail Group

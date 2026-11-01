@@ -12,6 +12,7 @@ review_due: 2026-12-31
 source_location: //fs01.norvane.internal/procurement/contracts/vantage-fibre/sla-annex-b.pdf
 related: [DOC-005, DOC-010, DOC-033]
 supersedes: []
+synthetic: true
 ---
 
 # Upstream Connectivity SLA — Vantage Fibre

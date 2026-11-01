@@ -12,6 +12,7 @@ review_due: 2026-03-01
 source_location: Email attachment — "Brambleby SLA final signed.pdf" (Service Desk mailbox archive, 2023-03-14)
 related: [DOC-001, DOC-005, DOC-006, DOC-031]
 supersedes: []
+synthetic: true
 ---
 
 # Service Schedule — Brambleby Logistics Ltd

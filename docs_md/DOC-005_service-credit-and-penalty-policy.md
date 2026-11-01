@@ -12,6 +12,7 @@ review_due: 2027-04-02
 source_location: Confluence / Service Delivery / Credit Policy (page 118822)
 related: [DOC-001, DOC-002, DOC-004, DOC-033]
 supersedes: [v2.0 (2022)]
+synthetic: true
 ---
 
 # Service Credit and Penalty Policy

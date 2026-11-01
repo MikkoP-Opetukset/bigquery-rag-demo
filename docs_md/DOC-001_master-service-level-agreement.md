@@ -12,6 +12,7 @@ review_due: 2026-10-15
 source_location: //fs01.norvane.internal/policies/legal/master-sla-v4.2.pdf
 related: [DOC-002, DOC-003, DOC-004, DOC-005, DOC-006]
 supersedes: []
+synthetic: true
 ---
 
 # Master Service Level Agreement
