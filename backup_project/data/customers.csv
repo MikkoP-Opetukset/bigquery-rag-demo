@@ -1,7 +1,0 @@
-customer_id,name,short_name,tier,industry,contract_start,contract_end,licensed_seats,sites,service_desk_hours,primary_contact_name,primary_contact_email
-CUST-01,Aurora Health District,Aurora,Platinum,Healthcare,2021-04-01,2027-03-31,480,3,24x7,Dr. Laura Nieminen,laura.nieminen@aurora.example.com
-CUST-02,Brambleby Logistics Ltd,Brambleby,Silver,Logistics,2023-03-01,2026-02-28,190,2,Business hours,Tom Ashworth,tom.ashworth@brambleby.example.com
-CUST-03,Cobalt Retail Group,Cobalt,Gold,Retail,2022-09-01,2026-08-31,760,6,24x7,Riikka Manninen,riikka.manninen@cobaltretail.example.com
-CUST-04,Feldspar Manufacturing Oy,Feldspar,Gold,Manufacturing,2020-01-15,2027-01-14,320,2,24x7,Jari Koskela,jari.koskela@feldspar.example.com
-CUST-05,Dunmore & Fisk Legal LLP,Dunmore,Silver,Legal,2024-06-01,2027-05-31,65,1,Business hours,Sarah Whitlock,s.whitlock@dunmorefisk.example.com
-CUST-06,Eastgate Housing Association,Eastgate,Bronze,Social housing,2019-10-01,2025-09-30,110,2,Business hours,Mikko Lahtinen,mikko.lahtinen@eastgate.example.com
